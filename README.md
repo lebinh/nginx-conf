@@ -25,7 +25,7 @@ A collection of useful Nginx configuration snippets inspired by
 - [Miscellaneous](#miscellaneous)
     - [Mirroring Requests](#mirroring-requests)
     - [Enable Cross Origin Resource Sharing](#enable-cross-origin-resource-sharing)
-
+- [Links](#links)
 
 ## The Nginx Command
 The `nginx` command can be used to perform some useful actions when Nginx is running.
@@ -271,3 +271,11 @@ location ~* \.(eot|ttf|woff) {
     add_header Access-Control-Allow-Origin *;
 }
 ```
+
+
+## Links
+Some other awesome sources for configuring Nginx:
+
+- [Nginx Official Guide](http://nginx.com/resources/admin-guide/)
+- [HTML 5 Boilerplate's Sample Nginx Configuration](https://github.com/h5bp/server-configs-nginx)
+- [Nginx Pitfalls](http://wiki.nginx.org/Pitfalls)
