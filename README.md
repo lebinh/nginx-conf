@@ -12,15 +12,19 @@ A collection of useful Nginx configuration snippets inspired by
     - [Redirect a Single Page](#redirect-a-single-page)
     - [Redirect an Entire Site](#redirect-an-entire-site)
     - [Redirect an Entire Sub Path](#redirect-an-entire-sub-path)
-- [Reverse Proxy and Load Balance](#reverse-proxy-and-load-balance)
 - [Performance](#performance)
     - [Contents Caching](#contents-caching)
     - [Gzip Compression](#gzip-compression)
     - [Open File Cache](#open-file-cache)
     - [SSL Cache](#ssl-cache)
     - [Upstream Keepalive](#upstream-keepalive)
+- [Monitoring](#monitoring)
 - [Security](#security)
+    - [Enable Basic Authentication](#enable-basic-authentication)
+    - [Only Allow Access From Localhost](#only-allow-access-from-localhost)
 - [Miscellaneous](#miscellaneous)
+    - [Mirroring Requests](#mirroring-requests)
+    - [Enable Cross Origin Resource Sharing](#enable-cross-origin-resource-sharing)
 
 
 ## The Nginx Command
@@ -194,7 +198,76 @@ server {
 ```
 
 
+## Monitoring
+
+The [Stub Status](http://nginx.org/en/docs/http/ngx_http_stub_status_module.html), which is not built by default, is a very simple to setup module but only provide very basic status of Nginx.
+```nginx
+location /status {
+    stub_status on;
+    access_log off;
+}
+```
+
+It provides the following status for the whole Nginx server in a plain text(!) format:
+- Client connections: accepted, handled, active (includes reading, writing and waiting).
+- Total number of client requests.
+
+**[Shameless Plug]** A _better_ way to capture Nginx status can be added by using [Luameter](https://luameter.com) which is a bit more complicated to setup and required the Nginx Lua module (which is awesome). It provides following metrics for each [configurable group](https://luameter.com/configuration) as a JSON API:
+- Total number of requests / responses.
+- Total number of responses groupped by status code: 1xx, 2xx, 3xx, 4xx, 5xx.
+- Total bytes received from / sent to client.
+- Sampled latency snapshot for estimation of: mean, max, median, 99th percentile, etc., latency.
+- Moving average rate of requests for easier monitoring and predicting.
+- And [some more](https://luameter.com/metrics).
+
+[Here is a sample dashboard built with Luameter's metrics](https://luameter.com/demo).
+
+
 ## Security
+
+### Enable Basic Authentication
+You will need a user password file somewhere first.
+```
+name:{PLAIN}plain-text-password
+```
+
+Then add below directives to `server`/`location` block that need to be protected.
+```nginx
+auth_basic "This is Protected";
+auth_basic_user_file /path/to/password-file;
+```
+
+### Only Allow Access From Localhost
+```nginx
+location /local {
+    allow 127.0.0.1;
+    deny all;
+    ...
+}
+```
 
 
 ## Miscellaneous
+
+### Sub-Request Upon Completion
+There some cases that you want to pass the request to another backend _in addition to and after_ serving it. One use case is to track the number of completed downloads by calling an API after user completed download of a file. Another use case is for tracking request where you want to return as fast as possible (perhaps with an `empty_gif`) and then do the actual recording in background. The [post_action](http://wiki.nginx.org/HttpCoreModule#post_action) that allows you to define a sub-request that will be fired upon completion of the current request are [perfect solution](http://mailman.nginx.org/pipermail/nginx/2008-April/004524.html) for theses use cases.
+```nginx
+location = /empty.gif {
+    empty_gif;
+    expires -1;
+    post_action @track; 
+}
+
+location @track {
+    internal;
+    proxy_pass http://tracking-backend;
+}
+```
+
+### Enable Cross Origin Resource Sharing
+Simple, wide-open configuration to allows cross-domain AJAX request to your server.
+```nginx
+location ~* \.(eot|ttf|woff) {
+    add_header Access-Control-Allow-Origin *;
+}
+```
