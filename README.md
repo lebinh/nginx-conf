@@ -23,7 +23,7 @@ A collection of useful Nginx configuration snippets inspired by
     - [Enable Basic Authentication](#enable-basic-authentication)
     - [Only Allow Access From Localhost](#only-allow-access-from-localhost)
 - [Miscellaneous](#miscellaneous)
-    - [Mirroring Requests](#mirroring-requests)
+    - [Sub-Request Upon Completion](#sub-request-upon-completion)
     - [Enable Cross Origin Resource Sharing](#enable-cross-origin-resource-sharing)
 - [Links](#links)
 
