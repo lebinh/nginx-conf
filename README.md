@@ -54,11 +54,10 @@ server {
 }
 ```
 
-Note that this also works for HTTPS site since we are using the `$scheme` variable.
+Note that this also works with HTTPS site.
 
 ### Force no-www
-Again, the [right way](http://nginx.org/en/docs/http/converting_rewrite_rules.html)
-is to define a separated server for the naked domain and redirect it.
+Again, the right way is to define a separated server for the www domain and redirect it.
 ```nginx
 server {
     listen 80;
@@ -120,9 +119,6 @@ location /old-site {
     rewrite ^/old-site/(.*) http://example.org/new-site/$1 permanent;
 }
 ```
-
-
-## Reverse Proxy and Load Balance
 
 
 ## Performance
@@ -200,7 +196,7 @@ server {
 
 ## Monitoring
 
-The [Stub Status](http://nginx.org/en/docs/http/ngx_http_stub_status_module.html), which is not built by default, is a very simple to setup module but only provide very basic status of Nginx.
+The [Stub Status](http://nginx.org/en/docs/http/ngx_http_stub_status_module.html), which is not built by default, is a very simple to setup module but only provide basic status of Nginx.
 ```nginx
 location /status {
     stub_status on;
@@ -208,7 +204,7 @@ location /status {
 }
 ```
 
-It provides the following status for the whole Nginx server in a plain text(!) format:
+It provides the following status for the whole Nginx server in plain text(!) format:
 - Client connections: accepted, handled, active (includes reading, writing and waiting).
 - Total number of client requests.
 
@@ -222,6 +218,8 @@ It provides the following status for the whole Nginx server in a plain text(!) f
 
 [Here is a sample dashboard built with Luameter's metrics](https://luameter.com/demo).
 
+[ngxtop](https://github.com/lebinh/ngxtop) is also a good way to check for Nginx status and checking / troubleshooting a live server.
+
 
 ## Security
 
@@ -231,7 +229,7 @@ You will need a user password file somewhere first.
 name:{PLAIN}plain-text-password
 ```
 
-Then add below directives to `server`/`location` block that need to be protected.
+Then add below config to `server`/`location` block that need to be protected.
 ```nginx
 auth_basic "This is Protected";
 auth_basic_user_file /path/to/password-file;
@@ -250,7 +248,7 @@ location /local {
 ## Miscellaneous
 
 ### Sub-Request Upon Completion
-There some cases that you want to pass the request to another backend _in addition to and after_ serving it. One use case is to track the number of completed downloads by calling an API after user completed download of a file. Another use case is for tracking request where you want to return as fast as possible (perhaps with an `empty_gif`) and then do the actual recording in background. The [post_action](http://wiki.nginx.org/HttpCoreModule#post_action) that allows you to define a sub-request that will be fired upon completion of the current request are [perfect solution](http://mailman.nginx.org/pipermail/nginx/2008-April/004524.html) for theses use cases.
+There are some cases that you want to pass the request to another backend _in addition to and after_ serving it. One use case is to track the number of completed downloads by calling an API after user completed download a file. Another use case is for tracking request where you want to return as fast as possible (perhaps with an `empty_gif`) and then do the actual recording in background. The [post_action](http://wiki.nginx.org/HttpCoreModule#post_action) that allows you to define a sub-request that will be fired upon completion of the current request are [perfect solution](http://mailman.nginx.org/pipermail/nginx/2008-April/004524.html) for these use cases.
 ```nginx
 location = /empty.gif {
     empty_gif;
@@ -265,7 +263,7 @@ location @track {
 ```
 
 ### Enable Cross Origin Resource Sharing
-Simple, wide-open configuration to allows cross-domain AJAX request to your server.
+Simple, wide-open configuration to allow cross-domain requests to your server.
 ```nginx
 location ~* \.(eot|ttf|woff) {
     add_header Access-Control-Allow-Origin *;
@@ -274,7 +272,7 @@ location ~* \.(eot|ttf|woff) {
 
 
 ## Links
-Some other awesome sources for configuring Nginx:
+Some other awesome resources for configuring Nginx:
 
 - [Nginx Official Guide](http://nginx.com/resources/admin-guide/)
 - [HTML 5 Boilerplate's Sample Nginx Configuration](https://github.com/h5bp/server-configs-nginx)
