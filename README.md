@@ -22,6 +22,7 @@ A collection of useful Nginx configuration snippets inspired by
 - [Security](#security)
     - [Enable Basic Authentication](#enable-basic-authentication)
     - [Only Allow Access From Localhost](#only-allow-access-from-localhost)
+    - [Disable SSLv3](#disable-sslLv3)
 - [Miscellaneous](#miscellaneous)
     - [Sub-Request Upon Completion](#sub-request-upon-completion)
     - [Enable Cross Origin Resource Sharing](#enable-cross-origin-resource-sharing)
@@ -244,6 +245,11 @@ location /local {
 }
 ```
 
+### Disable SSLv3
+Disable SSLv3 which is enabled by default. This prevents [POODLE SSL Attack](http://nginx.com/blog/nginx-poodle-ssl/).
+```nginx
+ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;  # don’t use SSLv3 ref: POODLE CVE-2014-356
+```
 
 ## Miscellaneous
 
