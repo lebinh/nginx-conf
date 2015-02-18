@@ -25,6 +25,7 @@ A collection of useful Nginx configuration snippets inspired by
 - [Miscellaneous](#miscellaneous)
     - [Sub-Request Upon Completion](#sub-request-upon-completion)
     - [Enable Cross Origin Resource Sharing](#enable-cross-origin-resource-sharing)
+    - [Location block for php websites](#location-block-for-php-websites)
 - [Links](#links)
 
 ## The Nginx Command
@@ -270,6 +271,19 @@ location ~* \.(eot|ttf|woff) {
 }
 ```
 
+### Location block for php websites
+For websites that use a php backend either fpm or cgi, you can use this template
+for a fast and easy setup for your website.
+```nginx
+location ~ \.php$ {
+  try_files $uri =404;
+  client_max_body_size 64m;
+  client_body_buffer_size 128k;
+  include fastcgi_params;
+  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  fastcgi_pass unix:/path/to/php.sock;
+}
+```
 
 ## Links
 Some other awesome resources for configuring Nginx:
