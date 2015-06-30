@@ -45,13 +45,14 @@ is to define a separated server for the naked domain and redirect it.
 server {
     listen 80;
     server_name example.org;
+    root /directory/of/your/project;
     return 301 $scheme://www.example.org$request_uri;
 }
 
 server {
     listen 80;
     server_name www.example.org;
-    ...
+    root /directory/of/your/project;
 }
 ```
 
@@ -63,12 +64,14 @@ Again, the right way is to define a separated server for the www domain and redi
 server {
     listen 80;
     server_name example.org;
+    root /directory/of/your/project;
 }
 
 server {
     listen 80;
     server_name www.example.org;
     return 301 $scheme://example.org$request_uri;
+    root /directory/of/your/project;
 }
 ```
 
