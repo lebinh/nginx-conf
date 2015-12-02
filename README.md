@@ -94,7 +94,7 @@ server {
 This configuration only add trailing slash to URL that does not contain a dot because you probably don't want to add that trailing slash to your static files.
 [Source](http://stackoverflow.com/questions/645853/add-slash-to-the-end-of-every-url-need-rewrite-rule-for-nginx).
 ```nginx
-rewrite ^([^.]*[^/])$ $1/ permanent;
+rewrite ^([^.\?]*[^/])$ $1/ permanent;
 ```
 
 ### Redirect a Single Page
