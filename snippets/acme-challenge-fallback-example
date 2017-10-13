@@ -1,0 +1,3 @@
+location @acme-challenge-fallback {
+  proxy_pass http://example.com;
+}
