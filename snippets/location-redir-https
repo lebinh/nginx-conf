@@ -1,0 +1,6 @@
+# It's better to do the redirection in location `/`, rather than in the whole `server` scope,
+# as we can still specify expective locations that should not be redirected to HTTPS, like `/.well-known/acme-challenge/*`.
+location / {
+  # Replace 301(permanent) with 302 (temporary) if it's still under testing.
+  return 301 https://$server_name$request_uri;
+}
