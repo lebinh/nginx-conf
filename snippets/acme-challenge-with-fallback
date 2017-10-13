@@ -1,0 +1,11 @@
+# Similar to `/snippets/acme-challenge`, see it for more details.
+# Add a location of `@acme-challenge-fallback` after including this snippet.
+# Actually the "fallback" location is optional (it could be left undefined).
+location ^~ /.well-known/acme-challenge/ {
+    root /var/www/html;
+    try_files $uri @acme-challenge-fallback;
+}
+
+location = /.well-known/acme-challenge/ {
+    return 404;
+}
