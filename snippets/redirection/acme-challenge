@@ -1,3 +1,6 @@
+# Sources:
+# https://community.letsencrypt.org/t/cannot-renew-certs-when-redirecting-http-to-https/16984
+
 # Use `^~` here to avoid checking other regexes once this location is matched.
 location ^~ /.well-known/acme-challenge/ {
 
