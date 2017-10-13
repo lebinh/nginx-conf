@@ -1,3 +1,6 @@
+# Sources:
+# https://cipherli.st/
+
 #ssl_protocols TLSv1.3;# Requires nginx >= 1.13.0 else use TLSv1.2
 ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
 ssl_prefer_server_ciphers on; 
